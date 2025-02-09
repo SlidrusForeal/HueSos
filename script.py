@@ -257,6 +257,7 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+# ====================== Admin Login ======================
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
@@ -266,11 +267,60 @@ def admin_login():
             return redirect(url_for('admin_dashboard'))
         return "Неверные данные", 401
     return render_template_string('''
-        <form method="post">
-            Username: <input type="text" name="username"><br>
-            Password: <input type="password" name="password"><br>
-            <input type="submit" value="Login">
-        </form>
+        <style>
+            .admin-container {
+                max-width: 400px;
+                margin: 50px auto;
+                padding: 30px;
+                background: #1a1a1a;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            }
+            .admin-title {
+                color: #00ffff;
+                text-align: center;
+                margin-bottom: 30px;
+                font-size: 24px;
+                text-transform: uppercase;
+            }
+            .admin-form input {
+                width: 100%;
+                padding: 12px;
+                margin: 10px 0;
+                background: #333;
+                border: 1px solid #444;
+                color: white;
+                border-radius: 5px;
+                transition: all 0.3s;
+            }
+            .admin-form input:focus {
+                outline: none;
+                border-color: #00ffff;
+                box-shadow: 0 0 8px rgba(0,255,255,0.2);
+            }
+            .admin-form button {
+                width: 100%;
+                padding: 12px;
+                background: #009688;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-top: 20px;
+                transition: all 0.3s;
+            }
+            .admin-form button:hover {
+                background: #00796b;
+            }
+        </style>
+        <div class="admin-container">
+            <div class="admin-title">Admin Login</div>
+            <form class="admin-form" method="post">
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
     ''')
 
 @app.route('/admin/logout')
@@ -278,6 +328,7 @@ def admin_logout():
     session.pop('logged_in', None)
     return redirect(url_for('admin_login'))
 
+# ====================== Admin Dashboard ======================
 @app.route('/admin')
 @login_required
 def admin_dashboard():
@@ -302,11 +353,136 @@ def admin_dashboard():
         """
     links_html += "</table>"
     return render_template_string(f'''
-        <h1>Admin Dashboard</h1>
-        <a href="/admin/links/new">Add New Link</a>
-        {links_html}
+        <style>
+            .admin-header {{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 20px;
+                background: #1a1a1a;
+                margin-bottom: 30px;
+            }}
+            .admin-nav a {{
+                color: #00ffff;
+                text-decoration: none;
+                margin-left: 20px;
+                padding: 8px 15px;
+                border-radius: 5px;
+                transition: all 0.3s;
+            }}
+            .admin-nav a:hover {{
+                background: rgba(0,255,255,0.1);
+            }}
+            .links-table {{
+                width: 100%;
+                border-collapse: collapse;
+                background: #1a1a1a;
+                border-radius: 8px;
+                overflow: hidden;
+            }}
+            .links-table th, .links-table td {{
+                padding: 15px;
+                text-align: left;
+                border-bottom: 1px solid #333;
+            }}
+            .links-table th {{
+                background: #009688;
+                color: white;
+            }}
+            .links-table tr:hover {{
+                background: rgba(255,255,255,0.02);
+            }}
+            .action-buttons a {{
+                color: #00ffff;
+                margin-right: 10px;
+                text-decoration: none;
+            }}
+            .action-buttons button {{
+                background: #ff4444;
+                color: white;
+                border: none;
+                padding: 5px 10px;
+                border-radius: 3px;
+                cursor: pointer;
+                transition: all 0.3s;
+            }}
+            .action-buttons button:hover {{
+                background: #cc0000;
+            }}
+            .add-link-btn {{
+                display: inline-block;
+                padding: 10px 20px;
+                background: #009688;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+                margin: 20px 0;
+            }}
+        </style>
+
+        <div class="admin-header">
+            <h1>Admin Dashboard</h1>
+            <nav class="admin-nav">
+                <a href="/admin/logout">Logout</a>
+            </nav>
+        </div>
+
+        <div class="admin-content">
+            <a href="/admin/links/new" class="add-link-btn">+ Add New Link</a>
+            <table class="links-table">
+                {links_html}
+            </table>
+        </div>
     ''')
 
+def get_form_style():
+    return '''
+        <style>
+            .form-container {{
+                max-width: 600px;
+                margin: 30px auto;
+                padding: 30px;
+                background: #1a1a1a;
+                border-radius: 10px;
+            }}
+            .form-group {{
+                margin-bottom: 20px;
+            }}
+            .form-group label {{
+                display: block;
+                margin-bottom: 8px;
+                color: #00ffff;
+            }}
+            .form-group input {{
+                width: 100%;
+                padding: 12px;
+                background: #333;
+                border: 1px solid #444;
+                color: white;
+                border-radius: 5px;
+                transition: all 0.3s;
+            }}
+            .form-group input:focus {{
+                outline: none;
+                border-color: #00ffff;
+                box-shadow: 0 0 8px rgba(0,255,255,0.2);
+            }}
+            .form-submit {{
+                background: #009688;
+                color: white;
+                padding: 12px 25px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: all 0.3s;
+            }}
+            .form-submit:hover {{
+                background: #00796b;
+            }}
+        </style>
+    '''
+
+# Модифицируем формы создания/редактирования
 @app.route('/admin/links/new', methods=['GET', 'POST'])
 @login_required
 def new_link():
@@ -326,16 +502,37 @@ def new_link():
         ))
         db.commit()
         return redirect(url_for('admin_dashboard'))
-    return render_template_string('''
-        <form method="post">
-            Path: <input type="text" name="path"><br>
-            Title: <input type="text" name="title"><br>
-            Description: <input type="text" name="description"><br>
-            Image URL: <input type="text" name="image_url"><br>
-            Redirect URL: <input type="text" name="redirect_url"><br>
-            Redirect Delay: <input type="number" name="redirect_delay"><br>
-            <input type="submit" value="Create">
-        </form>
+    return render_template_string(get_form_style() + '''
+        <div class="form-container">
+            <h2>Create New Link</h2>
+            <form method="post">
+                <div class="form-group">
+                    <label>Path:</label>
+                    <input type="text" name="path" required>
+                </div>
+                <div class="form-group">
+                    <label>Title:</label>
+                    <input type="text" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <input type="text" name="description" required>
+                </div>
+                <div class="form-group">
+                    <label>Image URL:</label>
+                    <input type="text" name="image_url" required>
+                </div>
+                <div class="form-group">
+                    <label>Redirect URL:</label>
+                    <input type="text" name="redirect_url" required>
+                </div>
+                <div class="form-group">
+                    <label>Redirect Delay:</label>
+                    <input type="number" name="redirect_delay" required>
+                </div>
+                <button type="submit" class="form-submit">Create</button>
+            </form>
+        </div>
     ''')
 
 @app.route('/admin/links/<int:id>/edit', methods=['GET', 'POST'])
@@ -360,16 +557,37 @@ def edit_link(id):
         ))
         db.commit()
         return redirect(url_for('admin_dashboard'))
-    return render_template_string(f'''
-        <form method="post">
-            Path: <input type="text" name="path" value="{link[1]}"><br>
-            Title: <input type="text" name="title" value="{link[2]}"><br>
-            Description: <input type="text" name="description" value="{link[3]}"><br>
-            Image URL: <input type="text" name="image_url" value="{link[4]}"><br>
-            Redirect URL: <input type="text" name="redirect_url" value="{link[5]}"><br>
-            Redirect Delay: <input type="number" name="redirect_delay" value="{link[6]}"><br>
-            <input type="submit" value="Update">
-        </form>
+    return render_template_string(get_form_style() + f'''
+        <div class="form-container">
+            <h2>Edit Link</h2>
+            <form method="post">
+                <div class="form-group">
+                    <label>Path:</label>
+                    <input type="text" name="path" value="{link[1]}" required>
+                </div>
+                <div class="form-group">
+                    <label>Title:</label>
+                    <input type="text" name="title" value="{link[2]}" required>
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <input type="text" name="description" value="{link[3]}" required>
+                </div>
+                <div class="form-group">
+                    <label>Image URL:</label>
+                    <input type="text" name="image_url" value="{link[4]}" required>
+                </div>
+                <div class="form-group">
+                    <label>Redirect URL:</label>
+                    <input type="text" name="redirect_url" value="{link[5]}" required>
+                </div>
+                <div class="form-group">
+                    <label>Redirect Delay:</label>
+                    <input type="number" name="redirect_delay" value="{link[6]}" required>
+                </div>
+                <button type="submit" class="form-submit">Update</button>
+            </form>
+        </div>
     ''')
 
 @app.route('/admin/links/<int:id>/delete', methods=['POST'])
