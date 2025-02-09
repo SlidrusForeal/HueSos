@@ -378,6 +378,15 @@ def home():
     <html lang="ru">
     <head>
         <meta charset="UTF-8">
+        <meta property="og:title" content="Анекдот дня">
+        <meta property="og:description" content="{joke}">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://ваш-сайт.ru/anekdot">
+        <meta property="og:image" content="https://ваш-сайт.ru/images/og-preview.jpg">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Анекдот дня">
+        <meta name="twitter:description" content="{joke}">
+        <meta name="twitter:image" content="https://ваш-сайт.ru/images/og-preview.jpg">
         <title>Анекдот</title>
         <style>
             body {{
