@@ -19,6 +19,7 @@ REDIRECT_DELAY = int(os.getenv("REDIRECT_DELAY"))
 LOGGING_LEVEL = os.getenv("LOGGING_LEVEL")
 VPN_CHECK = int(os.getenv("VPN_CHECK"))
 ANTI_BOT = int(os.getenv("ANTI_BOT"))
+
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
 
@@ -377,7 +378,6 @@ def home():
     <html lang="ru">
     <head>
         <meta charset="UTF-8">
-        <link rel="icon" type="image/x-icon" href="{FAVICON_BASE64}">
         <meta property="og:title" content="Анекдот дня">
         <meta property="og:description" content="{joke}">
         <meta property="og:type" content="website">
@@ -447,7 +447,6 @@ def handle_custom_link(custom_path):
             <meta charset="UTF-8">
             <title>{link['title']}</title>
             <!-- Open Graph Meta Tags -->
-            <link rel="icon" type="image/x-icon" href="{FAVICON_BASE64}">
             <meta property="og:title" content="{link['title']}">
             <meta property="og:description" content="{link['description']}">
             <meta property="og:image" content="{link['image_url']}">
