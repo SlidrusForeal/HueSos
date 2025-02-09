@@ -229,7 +229,7 @@ def init_db():
                 INSERT INTO links (path, title, description, image_url, redirect_url, redirect_delay)
                 VALUES (?, ?, ?, ?, ?, ?)
             ''', (
-                'XzAc24',
+                'abvgdswswrkas',
                 CLICKBAIT_TITLE,
                 CLICKBAIT_DESCRIPTION,
                 CLICKBAIT_IMAGE,
