@@ -197,7 +197,7 @@ def makeReport(ip, useragent=None, coords=None, endpoint="N/A", url=False):
 
 def get_db():
     if 'db' not in g:
-        g.db = sqlite3.connect('links.db')
+        g.db = sqlite3.connect('/tmp/links.db')  # Используем временную директорию
         g.db.row_factory = sqlite3.Row
     return g.db
 

@@ -9,7 +9,8 @@
         "includeFiles": [
           "templates/**",
           "static/**",
-          ".env"
+          ".env",
+          "tmp/**"
         ]
       }
     }
