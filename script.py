@@ -31,10 +31,10 @@ def home():
 @app.route('/generate')
 def generate_link():
     # Здесь можно в будущем реализовать генерацию уникальных ссылок.
-    return f"Вот ваша кликбейт-ссылка: {request.host_url}clickbait"
+    return f"Вот ваша ссылка: {request.host_url}sosish"
 
 
-@app.route('/clickbait')
+@app.route('/Sosish')
 def clickbait_page():
     global click_count
     click_count += 1
