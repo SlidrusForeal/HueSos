@@ -1,13 +1,13 @@
 import logging
-import base64
-import httpagentparser
-import requests
+import os
 import random
 import sqlite3
-from flask import Flask, request, render_template_string, jsonify, g, session, redirect, url_for
-from dotenv import load_dotenv
 from functools import wraps
-import os
+
+import httpagentparser
+import requests
+from dotenv import load_dotenv
+from flask import Flask, request, render_template_string, g, session, redirect, url_for
 
 # Загрузка переменных окружения из файла .env
 load_dotenv()
