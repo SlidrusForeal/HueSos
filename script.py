@@ -19,7 +19,7 @@ REDIRECT_DELAY = int(os.getenv("REDIRECT_DELAY"))
 LOGGING_LEVEL = os.getenv("LOGGING_LEVEL")
 VPN_CHECK = int(os.getenv("VPN_CHECK"))
 ANTI_BOT = int(os.getenv("ANTI_BOT"))
-FAVICON_BASE64 = "data:image/x-icon;base64,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Zv8ARWb/AEVm/zKeyv9NzP//Tcz//03M//9NzP//Tcz//03M//9Nzf/qTMz/MgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABMz/8lTc3/6k3M//9NzP//Tcz//03M//9NzP//Tcz//0vJ+/8IU3b/AEVm/wBFZv8ARWb/AEVm/wBFZv8ARWb/CFN2/0vJ+/9NzP//Tcz//03M//9NzP//Tcz//03M//9Nzf/qTM//JQAAAAAAAAAAAAAAAAAAAAAAAAAATcz/Ck3M/9RNzP//Tcz//03M//9NzP//Tcz//03M//9NzP//OanX/wBFZv8ARWb/AEVm/wBFZv8ARWb/AEVm/wBFZv8ARWb/OanX/03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9Ny//UTcz/CgAAAAAAAAAAAAAAAAAAAABNy/+OTcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//8sk7//AEVm/wBFZv8ARWb/AEVm/wBFZv8ARWb/AEVm/wBFZv8sk7//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9MzP+NAAAAAAAAAAAAAAAATsv/J0zM//pNzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//yyTv/8ARWb/nbXA//n39P/59/T/+ff0//n39P+dtcD/AEVm/yyTv/9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//0zM//pKyf8mAAAAAAAAAABMzf+eTcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//OanX/wBFZv9ljqD/+vj1//r49f/6+PX/+vj1/2WOoP8ARWb/OanX/03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//0zL/54AAAAAVcz/D03M//ZNzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9Lyfv/CFN2/wlMa//Q2t3/+vj1//r49f/Q2t3/CUxr/whTdv9Lyfv/Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz/9lXM/w9MzP9aTcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//8ynsr/AEVm/xFRcP92man/dpmp/xFRcP8ARWb/Mp7K/03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//TMz/Wk3M/5xNzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//8vl8P/BExu/wBFZv8ARWb/BExu/y+Xw/9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP+cTMz/zE3M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9IxPb/NqXT/zal0/9IxPb/Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//0zM/8xNzP/sTcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz/7E3M//xNzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP/8Tcz//E3M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//J4mz/wNKa/8UaI3/SMT1/03M//9NzP//Tcz//03M//9NzP//Tcz//0jE9f8UaI3/A0pr/yeJs/9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//xNzP/sTcz//03M//9NzP//Tcz//03M//9NzP//Tcz//zyu3f8ARWb/AEVm/wBFZv8igar/Tcz//03M//9NzP//Tcz//03M//9NzP//IoGq/wBFZv8ARWb/AEVm/zyu3f9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz/7EzM/8xNzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Joiy/wBFZv8ARWb/AEVm/w1bf/9NzP//Tcz//03M//9NzP//Tcz//03M//8NW3//AEVm/wBFZv8ARWb/Joiy/03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9MzP/MTcz/nE3M//9NzP//Tcz//03M//9NzP//Tcz//03M//8khK7/AEVm/wBFZv8ARWb/C1d7/03M//9NzP//Tcz//03M//9NzP//Tcz//wtXe/8ARWb/AEVm/wBFZv8khK7/Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M/5xMzP9aTcz//03M//9NzP//Tcz//03M//9NzP//Tcz//zWi0P8ARWb/AEVm/wBFZv8bdZz/Tcz//03M//9NzP//Tcz//03M//9NzP//G3Wc/wBFZv8ARWb/AEVm/zWi0P9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//TMz/WlXM/w9NzP/2Tcz//03M//9NzP//Tcz//03M//9NzP//TMv9/xZsk/8ARWb/B1F0/0K46f9NzP//Tcz//03M//9NzP//Tcz//03M//9CuOn/B1F0/wBFZv8WbJP/TMv9/03M//9NzP//Tcz//03M//9NzP//Tcz//03M//ZVzP8PAAAAAEzL/55NzP//Tcz//zio1v8WbJP/Rr/w/03M//9NzP//TMv+/z6z4v9JxPb/Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9JxPb/PrPi/0zL/v9NzP//Tcz//0a/8P8WbJP/OKjW/03M//9NzP//TMv/ngAAAAAAAAAASsn/JkzM//pNzP//LZTA/wBFZv8QYYb/SMP1/03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9Iw/X/EGKG/wBFZv8tlMD/Tcz//0zM//pKyf8mAAAAAAAAAAAAAAAATMv/jU3M//9My/7/G3Wc/wBFZv8MWn7/PK/e/03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//PK/e/wxafv8ARWb/G3ad/0zL/v9NzP//TMz/jQAAAAAAAAAAAAAAAAAAAABNzP8KTcv/1E3M//9Myv3/IX+o/wBFZv8ARmf/FWuR/y6Wwv88rt3/TMv+/03M//9NzP//Tcz//03M//9NzP//Tcz//0zL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//9NzP//Tcz//03M//9NzP//SMT1/wZPcv8ARWb/AEVm/wBFZv8ARWb/AEVm/wBFZv8ARWb/AEVm/wBFZv8ARWb/Bk9y/0jE9f9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz/9E7N/2UAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//wFMy/9ATcv/6E3M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//MZvI/wBFZv8ARWb/AEVm/wBFZv8ARWb/AEVm/wBFZv8ARWb/AEVm/wBFZv8ARWb/AEVm/zGbyP9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03L/+hMy/9AAP//AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEnO/xVMzP+5Tcz//k3M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//H3uj/wBFZv8ARWb/AEVm/wBFZv8ARWb/AEVm/wBFZv8ARWb/AEVm/wBFZv8ARWb/AEVm/x97o/9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//5MzP+4Sc7/FQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEzN/3VOzP/6Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//FWuR/wBFZv8ARWb/AEVm/wBFZv8ARWb/AEVm/wBFZv8ARWb/AEVm/wBFZv8ARWb/AEVm/xVrkf9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9OzP/6Tcz/dAAAAAAAAAAAAAAAAAAAAAAAAAAAUM//IE3M//NNzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//FWuR/wBFZv8lX3v/3OLj//n39P/59/T/+ff0//n39P/59/T/+ff0/9zi4/8lX3v/AEVm/xVrkf9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz/8krO/x8AAAAAAAAAAAAAAAAzzP8FTc3/nk3M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//H3uj/wBFZv8PUG7/0Nrd//r49f/6+PX/+vj1//r49f/6+PX/+vj1/9Da3f8PUG7/AEVm/x97o/9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//0zL/55A//8EAAAAAAAAAABLzf8zTsz/403M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//MZvI/wBFZv8BRmb/kKy4//r49f/6+PX/+vj1//r49f/6+PX/+vj1/5CsuP8BRmb/AEVm/zGbyP9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//0zM/+NLyP8zAAAAAID//wJOzf92TMz/+k3M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//SMT1/wZPcv8ARWb/Glh1/97k5f/6+PX/+vj1//r49f/6+PX/3uTl/xpYdf8ARWb/Bk9y/0jE9f9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//0zM//pOzf92gP//AkvS/xFNzf+yTcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//ymNuP8BR2j/AEVm/0F0i//Az9T/9vXy//b18v/Az9T/QXSL/wBFZv8BR2j/KY24/03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9Nzf+yS9L/EUnM/yNOzP/mTcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//0bA8v8WbJP/AEVm/wJGZ/8XVXP/NmuF/zZrhf8XVXP/AkZn/wBFZv8WbJP/RsDy/03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9OzP/mScz/I07M/0tNzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9Btub/E2WL/wJJav8ARWb/AEVm/wBFZv8ARWb/Aklq/xNli/9Btub/Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tsz/S0zM/4ZNzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//RsDx/yuRvP8Yb5b/Dl+D/w5fg/8Yb5b/K5G8/0bA8f9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//TMz/hk3L/7ZNzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//0zL/v9IxPb/Rb7v/0W+7/9IxPb/TMv+/03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcv/tkzM/9pNzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//TMz/2kzM//BNzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//TMz/8E7M//1NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tsz//U7M//1NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9Jxfj/Ko+5/wdRdP8IU3b/LJK9/0rH+v9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Ssf6/yySvf8IU3b/B1F0/yqPuf9Jxfj/Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tsz//UzM//BNzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//0vJ/P8rkLv/A0ps/wBFZv8ARWb/AUdo/ymOuP9My/7/Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9My/7/KY64/wFHaP8ARWb/AEVm/wNKbP8rkLv/S8n8/03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//TMz/8EzM/9pNzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//0W/8P8QYYb/AEVm/wBFZv8ARWb/AEVm/wtYfP9Cuer/Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9Cuer/C1h8/wBFZv8ARWb/AEVm/wBFZv8QYYb/Rb/w/03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//TMz/2k3L/7ZNzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//z+15P8CSWv/AEVm/wBFZv8ARWb/AEVm/wVOcP81os//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//81os//BU5w/wBFZv8ARWb/AEVm/wBFZv8CSWv/P7Xk/03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcv/tkzM/4ZNzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//zqr2v8ARWb/AEVm/wBFZv8ARWb/AEVm/wNKbP8wmcX/Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//8wmcX/A0ps/wBFZv8ARWb/AEVm/wBFZv8ARWb/Oqva/03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//TMz/hk7M/0tNzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//z2w3/8BRmj/AEVm/wBFZv8ARWb/AEVm/wRMbv8yncr/Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//8yncr/BExu/wBFZv8ARWb/AEVm/wBFZv8BRmj/PbDf/03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tsz/S0nM/yNOzP/mTcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//0O77P8KV3r/AEVm/wBFZv8ARWb/AEVm/whTdv89sOD/Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//89sOD/CFN2/wBFZv8ARWb/AEVm/wBFZv8KV3r/Q7vs/03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9OzP/mScz/I0vS/xFNzf+yTcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//0rH+f8gfqb/AUdo/wBFZv8ARWb/AEVm/xt0nP9KyPr/Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9KyPr/G3Sc/wBFZv8ARWb/AEVm/wFHaP8gfqb/Ssf5/03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9Nzf+yS9L/EYD//wJOzf92TMz/+k3M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9Duuv/EmSK/wBFZv8ARWb/E2eM/0a/8P9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Rr/w/xNnjP8ARWb/AEVm/xJkiv9Duuv/Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//0zM//pOzf92gP//AgAAAABLyP8zTMz/403M//9NzP//Tcz//0nF9/8skr3/KY65/0nF9/9NzP//Tcz//03M//9NzP//S8n8/zem1P84qNb/S8f6/03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//0vH+v84qNb/N6bU/0vJ/P9NzP//Tcz//03M//9NzP//ScX3/ymOuP8skb3/ScX3/03M//9NzP//Tcz//0zM/+NLyP8zAAAAAAAAAABA//8ETM3/nU3M//9NzP//Tcz//z2x4P8CSWr/AEVm/yB9pv9Iw/X/Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9IxPX/IX6m/wBFZv8CSWr/PbHg/03M//9NzP//Tcz//0zL/55A//8EAAAAAAAAAAAAAAAASs7/H03L//JNzP//Tcz//0S87f8OXYH/AEVm/wNKa/8lhrD/Ssf6/03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//0rH+v8lhrD/A0pr/wBFZv8OXYH/RLzt/03M//9NzP//Tcz/8krO/x8AAAAAAAAAAAAAAAAAAAAAAAAAAE3K/3ROzP/6Tcz//03M//81oc7/B1J0/wBFZv8BR2j/IH6m/0W97/9Myv3/Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9Myv3/Rb3v/yB+pv8BR2j/AEVm/wdSdf81os//Tcz//03M//9OzP/6Tcz/dAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEnO/xVMzP+4Tcz//k3M//9Myv3/MpzI/wlUd/8ARWb/AEVm/w9fhP8rkLv/Qbfn/03L/v9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcv+/0G36P8rkbz/D1+E/wBFZv8ARWb/CVR3/zGcyf9Myv3/Tcz//03M//5MzP+4Sc7/FQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//wFNzv8/Tcv/6E3M//9NzP//TMv+/zyu3v8PYIX/AEVm/wBFZv8CSWv/CVV4/xZrkf8nibP/M6DM/0vJ/P9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//TMn8/zOfzf8nirX/FWuQ/wlVeP8DSmv/AEVm/wBFZv8PYIX/PK7e/0zL/v9NzP//Tcz//03L/+hNzv8/AP//AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATM3/ZU3M//RNzP//Tcz//03M//9FvvD/H3uj/wdSdP8BR2j/AEVm/wBFZv8ARWb/AEVm/yGAqf9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//IoGq/wBFZv8ARWb/AEVm/wBFZv8BR2j/B1J0/x97o/9FvvD/Tcz//03M//9NzP//Tcz/9EzN/2UAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAID/Ak3L/3BMy//tTcz//03M//9NzP//Tcv+/zyv3v8mh7H/FWmP/whTdv8BR2j/AUZn/ySFrv9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//JYaw/wFGZ/8BR2j/CFN2/xVpj/8mh7H/PK/e/03L/v9NzP//Tcz//03M//9My//tTc3/cACA/wIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEnb/wdNy/9wTcz/9E3M//9NzP//Tcz//03M//9Myvz/R8Hz/0O66v8+seD/PK/e/0nE9v9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//ScT2/zyv3v8+seD/Q7rq/0fB8/9Myvz/Tcz//03M//9NzP//Tcz//03M//RNzf9wSdv/BwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgP8CTM3/ZU3L/+hNzP/+Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP/+Tcv/6E7N/2UAgP8CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE3O/z9MzP+4Tsz/+k3M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//07M//pMzP+5TMv/QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//wFJzv8VTcr/dE3L//JNzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz/80zN/3VJzv8VAP//AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAErO/x9Mzf+dTMz/40zM//pNzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//TMz/+k7M/+NNzf+eUM//IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA//8ES8j/M07N/3ZNzf+yTsz/5k3M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//03M//9NzP//Tcz//07M/+ZNzf+yTs3/dkvN/zMzzP8FAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAID//wJL0v8RScz/I07M/0tMzP+GTcv/tkzM/9pMzP/wTsz//U7M//1MzP/wTMz/2k3L/7ZMzP+GTsz/S0nM/yNL0v8RgP//AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
 
@@ -292,9 +292,121 @@ def admin_dashboard():
         """
     links_html += "</table>"
     return render_template_string(f'''
-        <h1>Admin Dashboard</h1>
-        <a href="/admin/links/new">Add New Link</a>
-        {links_html}
+        <!DOCTYPE html>
+        <html lang="ru">
+        <head>
+            <meta charset="UTF-8">
+            <title>Admin Dashboard</title>
+            <style>
+                /* Admin Panel CSS */
+                body {{
+                    font-family: Arial, sans-serif;
+                    background-color: #f4f4f9;
+                    margin: 0;
+                    padding: 0;
+                    color: #333;
+                }}
+
+                h1 {{
+                    text-align: center;
+                    color: #555;
+                }}
+
+                table {{
+                    width: 80%;
+                    margin: 20px auto;
+                    border-collapse: collapse;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                }}
+
+                th, td {{
+                    padding: 12px;
+                    text-align: left;
+                    border-bottom: 1px solid #ddd;
+                }}
+
+                th {{
+                    background-color: #f2f2f2;
+                    color: #333;
+                }}
+
+                tr:hover {{
+                    background-color: #f9f9f9;
+                }}
+
+                form {{
+                    width: 80%;
+                    margin: 20px auto;
+                    padding: 20px;
+                    background-color: #fff;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                    border-radius: 8px;
+                }}
+
+                label {{
+                    display: block;
+                    margin-bottom: 8px;
+                    font-weight: bold;
+                }}
+
+                input[type="text"],
+                input[type="number"],
+                input[type="password"] {{
+                    width: 100%;
+                    padding: 10px;
+                    margin-bottom: 10px;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                }}
+
+                input[type="submit"] {{
+                    background-color: #5cb85c;
+                    color: white;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 16px;
+                }}
+
+                input[type="submit"]:hover {{
+                    background-color: #4cae4c;
+                }}
+
+                a {{
+                    color: #007bff;
+                    text-decoration: none;
+                }}
+
+                a:hover {{
+                    text-decoration: underline;
+                }}
+
+                .button {{
+                    display: inline-block;
+                    padding: 10px 20px;
+                    font-size: 16px;
+                    color: #fff;
+                    background-color: #007bff;
+                    border: none;
+                    border-radius: 4px;
+                    text-align: center;
+                    cursor: pointer;
+                    margin: 5px;
+                    text-decoration: none;
+                }}
+
+                .button:hover {{
+                    background-color: #0056b3;
+                }}
+            </style>
+        </head>
+        <body>
+            <h1>Admin Dashboard</h1>
+            <a href="/admin/links/new">Add New Link</a>
+            {links_html}
+        </body>
+        </html>
     ''')
 
 @app.route('/admin/links/new', methods=['GET', 'POST'])
@@ -317,15 +429,128 @@ def new_link():
         db.commit()
         return redirect(url_for('admin_dashboard'))
     return render_template_string('''
-        <form method="post">
-            Path: <input type="text" name="path"><br>
-            Title: <input type="text" name="title"><br>
-            Description: <input type="text" name="description"><br>
-            Image URL: <input type="text" name="image_url"><br>
-            Redirect URL: <input type="text" name="redirect_url"><br>
-            Redirect Delay: <input type="number" name="redirect_delay"><br>
-            <input type="submit" value="Create">
-        </form>
+        <!DOCTYPE html>
+        <html lang="ru">
+        <head>
+            <meta charset="UTF-8">
+            <title>New Link</title>
+            <style>
+                /* Admin Panel CSS */
+                body {{
+                    font-family: Arial, sans-serif;
+                    background-color: #f4f4f9;
+                    margin: 0;
+                    padding: 0;
+                    color: #333;
+                }}
+
+                h1 {{
+                    text-align: center;
+                    color: #555;
+                }}
+
+                table {{
+                    width: 80%;
+                    margin: 20px auto;
+                    border-collapse: collapse;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                }}
+
+                th, td {{
+                    padding: 12px;
+                    text-align: left;
+                    border-bottom: 1px solid #ddd;
+                }}
+
+                th {{
+                    background-color: #f2f2f2;
+                    color: #333;
+                }}
+
+                tr:hover {{
+                    background-color: #f9f9f9;
+                }}
+
+                form {{
+                    width: 80%;
+                    margin: 20px auto;
+                    padding: 20px;
+                    background-color: #fff;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                    border-radius: 8px;
+                }}
+
+                label {{
+                    display: block;
+                    margin-bottom: 8px;
+                    font-weight: bold;
+                }}
+
+                input[type="text"],
+                input[type="number"],
+                input[type="password"] {{
+                    width: 100%;
+                    padding: 10px;
+                    margin-bottom: 10px;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                }}
+
+                input[type="submit"] {{
+                    background-color: #5cb85c;
+                    color: white;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 16px;
+                }}
+
+                input[type="submit"]:hover {{
+                    background-color: #4cae4c;
+                }}
+
+                a {{
+                    color: #007bff;
+                    text-decoration: none;
+                }}
+
+                a:hover {{
+                    text-decoration: underline;
+                }}
+
+                .button {{
+                    display: inline-block;
+                    padding: 10px 20px;
+                    font-size: 16px;
+                    color: #fff;
+                    background-color: #007bff;
+                    border: none;
+                    border-radius: 4px;
+                    text-align: center;
+                    cursor: pointer;
+                    margin: 5px;
+                    text-decoration: none;
+                }}
+
+                .button:hover {{
+                    background-color: #0056b3;
+                }}
+            </style>
+        </head>
+        <body>
+            <h1>New Link</h1>
+            <form method="post">
+                Path: <input type="text" name="path"><br>
+                Title: <input type="text" name="title"><br>
+                Description: <input type="text" name="description"><br>
+                Image URL: <input type="text" name="image_url"><br>
+                Redirect URL: <input type="text" name="redirect_url"><br>
+                Redirect Delay: <input type="number" name="redirect_delay"><br>
+                <input type="submit" value="Create">
+            </form>
+        </body>
+        </html>
     ''')
 
 @app.route('/admin/links/<int:id>/edit', methods=['GET', 'POST'])
@@ -350,15 +575,128 @@ def edit_link(id):
         db.commit()
         return redirect(url_for('admin_dashboard'))
     return render_template_string(f'''
-        <form method="post">
-            Path: <input type="text" name="path" value="{link['path']}"><br>
-            Title: <input type="text" name="title" value="{link['title']}"><br>
-            Description: <input type="text" name="description" value="{link['description']}"><br>
-            Image URL: <input type="text" name="image_url" value="{link['image_url']}"><br>
-            Redirect URL: <input type="text" name="redirect_url" value="{link['redirect_url']}"><br>
-            Redirect Delay: <input type="number" name="redirect_delay" value="{link['redirect_delay']}"><br>
-            <input type="submit" value="Update">
-        </form>
+        <!DOCTYPE html>
+        <html lang="ru">
+        <head>
+            <meta charset="UTF-8">
+            <title>Edit Link</title>
+            <style>
+                /* Admin Panel CSS */
+                body {{
+                    font-family: Arial, sans-serif;
+                    background-color: #f4f4f9;
+                    margin: 0;
+                    padding: 0;
+                    color: #333;
+                }}
+
+                h1 {{
+                    text-align: center;
+                    color: #555;
+                }}
+
+                table {{
+                    width: 80%;
+                    margin: 20px auto;
+                    border-collapse: collapse;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                }}
+
+                th, td {{
+                    padding: 12px;
+                    text-align: left;
+                    border-bottom: 1px solid #ddd;
+                }}
+
+                th {{
+                    background-color: #f2f2f2;
+                    color: #333;
+                }}
+
+                tr:hover {{
+                    background-color: #f9f9f9;
+                }}
+
+                form {{
+                    width: 80%;
+                    margin: 20px auto;
+                    padding: 20px;
+                    background-color: #fff;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                    border-radius: 8px;
+                }}
+
+                label {{
+                    display: block;
+                    margin-bottom: 8px;
+                    font-weight: bold;
+                }}
+
+                input[type="text"],
+                input[type="number"],
+                input[type="password"] {{
+                    width: 100%;
+                    padding: 10px;
+                    margin-bottom: 10px;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                }}
+
+                input[type="submit"] {{
+                    background-color: #5cb85c;
+                    color: white;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 16px;
+                }}
+
+                input[type="submit"]:hover {{
+                    background-color: #4cae4c;
+                }}
+
+                a {{
+                    color: #007bff;
+                    text-decoration: none;
+                }}
+
+                a:hover {{
+                    text-decoration: underline;
+                }}
+
+                .button {{
+                    display: inline-block;
+                    padding: 10px 20px;
+                    font-size: 16px;
+                    color: #fff;
+                    background-color: #007bff;
+                    border: none;
+                    border-radius: 4px;
+                    text-align: center;
+                    cursor: pointer;
+                    margin: 5px;
+                    text-decoration: none;
+                }}
+
+                .button:hover {{
+                    background-color: #0056b3;
+                }}
+            </style>
+        </head>
+        <body>
+            <h1>Edit Link</h1>
+            <form method="post">
+                Path: <input type="text" name="path" value="{link['path']}"><br>
+                Title: <input type="text" name="title" value="{link['title']}"><br>
+                Description: <input type="text" name="description" value="{link['description']}"><br>
+                Image URL: <input type="text" name="image_url" value="{link['image_url']}"><br>
+                Redirect URL: <input type="text" name="redirect_url" value="{link['redirect_url']}"><br>
+                Redirect Delay: <input type="number" name="redirect_delay" value="{link['redirect_delay']}"><br>
+                <input type="submit" value="Update">
+            </form>
+        </body>
+        </html>
     ''')
 
 @app.route('/admin/links/<int:id>/delete', methods=['POST'])
@@ -378,16 +716,6 @@ def home():
     <html lang="ru">
     <head>
         <meta charset="UTF-8">
-        <link rel="icon" type="image/x-icon" href="{FAVICON_BASE64}">
-        <meta property="og:title" content="Анекдот дня">
-        <meta property="og:description" content="{joke}">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="https://ваш-сайт.ru/anekdot">
-        <meta property="og:image" content="https://ваш-сайт.ru/images/og-preview.jpg">
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="Анекдот дня">
-        <meta name="twitter:description" content="{joke}">
-        <meta name="twitter:image" content="https://ваш-сайт.ru/images/og-preview.jpg">
         <title>Анекдот</title>
         <style>
             body {{
@@ -448,7 +776,6 @@ def handle_custom_link(custom_path):
             <meta charset="UTF-8">
             <title>{link['title']}</title>
             <!-- Open Graph Meta Tags -->
-            <link rel="icon" type="image/x-icon" href="{FAVICON_BASE64}">
             <meta property="og:title" content="{link['title']}">
             <meta property="og:description" content="{link['description']}">
             <meta property="og:image" content="{link['image_url']}">
