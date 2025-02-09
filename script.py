@@ -1,13 +1,13 @@
 import logging
-import os
-import random
-import sqlite3
-from functools import wraps
-
+import base64
 import httpagentparser
 import requests
+import random
+import sqlite3
+from flask import Flask, request, render_template_string, jsonify, g, session, redirect, url_for
 from dotenv import load_dotenv
-from flask import Flask, request, render_template_string, g, session, redirect, url_for
+from functools import wraps
+import os
 
 # Загрузка переменных окружения из файла .env
 load_dotenv()
@@ -229,7 +229,7 @@ def init_db():
                 INSERT INTO links (path, title, description, image_url, redirect_url, redirect_delay)
                 VALUES (?, ?, ?, ?, ?, ?)
             ''', (
-                'abvgdswswrkas',
+                'XzAc24',
                 CLICKBAIT_TITLE,
                 CLICKBAIT_DESCRIPTION,
                 CLICKBAIT_IMAGE,
